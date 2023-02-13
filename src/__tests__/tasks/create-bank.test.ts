@@ -58,6 +58,10 @@ describe("Test createBank function", () => {
     expect(typeof addClient).toBe("function");
     expect(typeof removeClient).toBe("function");
   });
+
+  test("Test createBank function with emptyBankName", () => {
+    expect(() => createBank("")).toThrow();
+  });
 });
 
 describe("Test subfunction addClient", () => {
