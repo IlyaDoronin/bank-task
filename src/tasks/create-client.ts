@@ -9,5 +9,7 @@ export const createClient = (name: string, balance?: number): Client => {
     balance = 0;
   }
 
-  return { name, balance };
+  const time = new Date().getTime();
+
+  return { name: name + "-" + time, balance };
 };
