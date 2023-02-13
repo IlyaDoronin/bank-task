@@ -1,6 +1,7 @@
 import { createBank } from "@/tasks/create-bank";
 
 import { CLIENTS } from "@/__dummies__/clients.dummy";
+import { CLIENTS_ADDED, CLIENTS_REMOVED } from "@/__stubs__/clients.stub";
 
 import type { Client } from "@/types/client";
 
@@ -11,7 +12,7 @@ type TestCase = {
     bankName: string;
     clients: Client[];
     addClient: (client: Client) => boolean;
-    removeClient: (client: Client) => boolean;
+    removeClient: (name: Client) => boolean;
   };
 };
 
@@ -24,7 +25,7 @@ describe("Test createBank function", () => {
         bankName: "Сбербанк",
         clients: CLIENTS,
         addClient: (client) => true,
-        removeClient: (client) => true,
+        removeClient: (name) => true,
       },
     },
     {
@@ -34,7 +35,7 @@ describe("Test createBank function", () => {
         bankName: "Белагропромбанк",
         clients: [],
         addClient: (client) => true,
-        removeClient: (client) => true,
+        removeClient: (name) => true,
       },
     },
     {
@@ -44,7 +45,7 @@ describe("Test createBank function", () => {
         bankName: "Белагропромбанк",
         clients: [],
         addClient: (client) => true,
-        removeClient: (client) => true,
+        removeClient: (name) => true,
       },
     },
   ];
@@ -56,5 +57,38 @@ describe("Test createBank function", () => {
     expect(clients).toEqual(response.clients);
     expect(typeof addClient).toBe("function");
     expect(typeof removeClient).toBe("function");
+  });
+});
+
+describe("Test subfunction addClient", () => {
+  test("Add new client", () => {
+    const { clients, addClient } = createBank("Сбербанк", CLIENTS);
+
+    addClient({ name: "Николай-1672571471111", balance: 0 });
+    expect(clients).toEqual(CLIENTS_ADDED);
+  });
+
+  test("Add several of the same new client", () => {
+    const { clients, addClient } = createBank("Сбербанк", CLIENTS);
+
+    expect(addClient({ name: "Николай-1672571471111", balance: 0 })).toBe(true);
+    expect(() => addClient({ name: "Николай-1672571471111", balance: 0 })).toThrow();
+    expect(clients).toEqual(CLIENTS_ADDED);
+  });
+});
+
+describe("Test subfunction removeClient", () => {
+  test("Remove existing client", () => {
+    const { clients, removeClient } = createBank("Сбербанк", CLIENTS);
+
+    expect(removeClient({ name: "Иван-1672571471111", balance: 0 })).toBe(true);
+    expect(clients).toEqual(CLIENTS_REMOVED);
+  });
+
+  test("Remove non existing client", () => {
+    const { clients, removeClient } = createBank("Сбербанк", CLIENTS);
+
+    expect(() => removeClient({ name: "Вадим-1672571471111", balance: 0 })).toThrow();
+    expect(clients).toEqual(CLIENTS);
   });
 });
