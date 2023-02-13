@@ -85,14 +85,14 @@ describe("Test subfunction removeClient", () => {
   test("Remove existing client", () => {
     const { clients, removeClient } = createBank("Сбербанк", CLIENTS);
 
-    expect(removeClient({ name: "Иван-1672571471111", balance: 0 })).toBe(true);
+    expect(removeClient("Иван-1672571471111")).toBe(true);
     expect(clients).toEqual(CLIENTS_REMOVED);
   });
 
   test("Remove non existing client", () => {
     const { clients, removeClient } = createBank("Сбербанк", CLIENTS);
 
-    expect(() => removeClient({ name: "Вадим-1672571471111", balance: 0 })).toThrow();
+    expect(() => removeClient("Вадим-1672571471111")).toThrow();
     expect(clients).toEqual(CLIENTS);
   });
 });
